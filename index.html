@@ -9,112 +9,215 @@
 
 <style>
 body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
 }
 
+/* Card */
 .card {
-    width: 90%;
-    max-width: 360px;
-    background: white;
-    border-radius: 22px;
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    cursor: pointer;
+  width: 90%;
+  max-width: 360px;
+  background: white;
+  border-radius: 22px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  cursor: pointer;
 }
 
 h1 {
-    font-family: 'Playfair Display', serif;
-    color: #e63946;
-}
-
-.message {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: 0.6s ease;
-}
-
-.card.open .message {
-    opacity: 1;
-    transform: translateY(0);
+  font-family: 'Playfair Display', serif;
+  color: #e63946;
 }
 
 .tap {
-    font-size: 14px;
-    color: #666;
+  font-size: 14px;
+  color: #666;
 }
 
+.message {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: 0.6s ease;
+}
+
+.card.open .message {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Taunt text */
+.taunt {
+  font-size: 14px;
+  color: #777;
+  margin-top: 6px;
+  opacity: 0;
+  transform: translateY(6px) scale(0.95);
+  transition: all 0.35s ease;
+}
+
+.taunt.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Cartoon + bubble */
+.cartoon-wrap {
+  position: relative;
+  margin-top: 12px;
+}
+
+.cartoon {
+  font-size: 60px;
+}
+
+.cartoon.panic {
+  animation: panic 0.4s;
+}
+
+@keyframes panic {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(-10deg) scale(1.05); }
+  50% { transform: rotate(10deg) scale(1.1); }
+  75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0); }
+}
+
+.cartoon.happy {
+  animation: jump 0.6s ease;
+}
+
+@keyframes jump {
+  0% { transform: translateY(0); }
+  30% { transform: translateY(-20px) scale(1.1); }
+  60% { transform: translateY(0); }
+}
+
+/* Speech bubble */
+.bubble {
+  position: absolute;
+  bottom: 75px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: white;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: white transparent transparent;
+}
+
+.bubble.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.bubble.angry {
+  animation: bubbleShake 0.4s;
+}
+
+@keyframes bubbleShake {
+  0% { transform: translateX(-50%) scale(1); }
+  25% { transform: translateX(-54%) scale(1.05); }
+  50% { transform: translateX(-46%) scale(1.05); }
+  75% { transform: translateX(-54%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+/* Pointer */
+.pointer {
+  position: absolute;
+  right: -45px;
+  top: 40px;
+  font-size: 28px;
+  opacity: 0;
+  animation: pointWiggle 0.8s infinite;
+}
+
+.pointer.show {
+  opacity: 1;
+}
+
+@keyframes pointWiggle {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+
+/* Buttons */
 .buttons {
-    margin-top: 25px;
-    display: none;
-    justify-content: center;
+  margin-top: 20px;
+  display: none;
+  justify-content: center;
 }
 
 .card.open .buttons {
-    display: flex;
+  display: flex;
 }
 
 button {
-    border: none;
-    border-radius: 30px;
-    padding: 12px 22px;
-    font-size: 16px;
-    cursor: pointer;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 22px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 #yesBtn {
-    background: #e63946;
-    color: white;
-    font-size: 18px;
-    padding: 14px 30px;
-    transition: transform 0.2s ease;
+  background: #e63946;
+  color: white;
+  font-size: 18px;
+  padding: 14px 30px;
+  transition: transform 0.2s ease;
 }
 
 #noBtn {
-    background: #f1f1f1;
-    color: #333;
-    position: absolute;
+  position: absolute;
+  background: #f1f1f1;
 }
 
-.music {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    background: white;
-    border-radius: 50%;
-    padding: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    cursor: pointer;
+/* Hearts + confetti */
+.heart, .confetti {
+  position: absolute;
+  font-size: 20px;
 }
 
 .heart {
-    position: absolute;
-    bottom: -20px;
-    font-size: 22px;
-    animation: float 4s linear infinite;
+  bottom: -20px;
+  animation: float 4s linear infinite;
 }
 
 @keyframes float {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-450px); opacity: 0; }
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-450px); opacity: 0; }
 }
 
 .confetti {
-    position: absolute;
-    font-size: 20px;
-    animation: confetti 3s linear forwards;
+  animation: confetti 3s linear forwards;
 }
 
 @keyframes confetti {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(600px); opacity: 0; }
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(600px); opacity: 0; }
 }
 </style>
 </head>
@@ -122,123 +225,180 @@ button {
 <body>
 
 <div class="card" onclick="openCard()">
-    <h1>💌 Happy Valentine’s</h1>
-    <p class="tap">(Tap to open)</p>
+  <h1>Will you be Mine Bestie❤️</h1>
+  <p class="tap">(Don't even think about tapping No)</p>
 
-    <div class="message">
-        <p><strong>Gracié will you be my Valentine?</strong> 💖</p>
-    </div>
+  <div class="message">
+    <p><strong>Will you be my Valentine?</strong> 💖</p>
+    <p id="taunt" class="taunt"></p>
 
-    <div class="buttons">
-        <button id="yesBtn" onclick="yesClicked(event)">Yes 😍</button>
+    <div class="cartoon-wrap">
+      <div id="bubble" class="bubble"></div>
+      <div id="cartoon" class="cartoon">🥺</div>
+      <div id="pointer" class="pointer">👉</div>
     </div>
+  </div>
+
+  <div class="buttons">
+    <button id="yesBtn" onclick="yesClicked(event)">Yes 😍</button>
+  </div>
 </div>
 
-<button id="noBtn">No 😒</button>
-
-<div class="music" onclick="toggleMusic()">🎵</div>
+<button id="noBtn">No 😒</<div id="musicBtn" class="music-btn">🎵</div>
 
 <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+  <source src=Creep.mp3">
 </audio>
 
 <script>
 const card = document.querySelector('.card');
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
-const music = document.getElementById('bgMusic');
+const tauntEl = document.getElementById('taunt');
+const cartoon = document.getElementById('cartoon');
+const bubble = document.getElementById('bubble');
+const pointer = document.getElementById('pointer');
 
-let speed = 300;
-let yesScale = 1;
 let dodgeCount = 0;
-let musicPlaying = false;
+let yesScale = 1;
+let speed = 300;
 
-const noTexts = ["NO 😒", "WAIT 😳", "HEY 😭", "STOP 🏃‍♂️", "PLS 😩"];
+const taunts = [
+  "You’re thinking too hard 😌",
+  "We both know the answer",
+	"You know you can't refuse",
+  "Just tap yes already 💖",
+  "Why are you running?",
+  "Do this for Noah...please😭🙏🏽",
+	"Your House will explode if you do that again💀"
+];
+
+const panicLines = [
+  "Ahhhh stop that 💀",
+  "WAIT WAIT WAIT 😭",
+  "Wrong button!!",
+  "Iye how could you🥲"
+];
+
+const happyLines = [
+  "I KNEW IT 😍",
+  "YAYYY 💖",
+  "You were always in love with me 😌"
+];
 
 function openCard() {
-    card.classList.add('open');
+  card.classList.add('open');
+  moveNoButton();
+	music.volume = 0;
+  music.play();
 
-    for (let i = 0; i < 8; i++) {
-        let heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerHTML = '❤️';
-        heart.style.left = Math.random() * 100 + '%';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
-    }
+let vol = 0;
+const fade = setInterval(() => {
+  if (vol < 1) {
+    vol += 0.05;
+    music.volume = vol;
+  } else {
+    clearInterval(fade);
+  }
+}, 200);
+  for (let i = 0; i < 6; i++) {
+    let h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = '❤️';
+    h.style.left = Math.random() * 100 + '%';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
+  }
+}
 
-    moveNoButton();
+function updateTaunt() {
+  tauntEl.classList.remove('show');
+  setTimeout(() => {
+    tauntEl.textContent = taunts[Math.floor(Math.random() * taunts.length)];
+    tauntEl.classList.add('show');
+  }, 200);
+}
+
+function showBubble(text, angry=false) {
+  bubble.textContent = text;
+  bubble.classList.add('show');
+  if (angry) bubble.classList.add('angry');
+
+  setTimeout(() => {
+    bubble.classList.remove('show', 'angry');
+  }, 900);
 }
 
 function moveNoButton() {
-    dodgeCount++;
+  dodgeCount++;
+  updateTaunt();
 
-    noBtn.textContent = noTexts[dodgeCount % noTexts.length];
+  showBubble(
+    panicLines[Math.floor(Math.random() * panicLines.length)],
+    true
+  );
 
-    if (dodgeCount % 3 === 0) {
-        setTimeout(actualMove, speed);
-    } else {
-        actualMove();
-    }
+  cartoon.textContent = "😳";
+  cartoon.classList.add("panic");
 
-    speed = Math.max(80, speed - 30);
+  setTimeout(() => {
+    cartoon.classList.remove("panic");
+    cartoon.textContent = "🥺";
+  }, 400);
 
-    yesScale += 0.1;
-    yesBtn.style.transform = `scale(${yesScale})`;
-}
+  if (dodgeCount >= 3) pointer.classList.add('show');
 
-function actualMove() {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+  yesScale += 0.08;
+  yesBtn.style.transform = `scale(${yesScale})`;
+
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
+  setTimeout(() => {
     noBtn.style.left = x + 'px';
     noBtn.style.top = y + 'px';
+  }, dodgeCount % 3 === 0 ? speed : 0);
+
+  speed = Math.max(80, speed - 30);
 }
 
 noBtn.addEventListener('mouseover', moveNoButton);
 noBtn.addEventListener('touchstart', moveNoButton);
 
 document.addEventListener('mousemove', e => {
-    yesBtn.style.transform =
-        `scale(${yesScale}) translate(${(e.clientX - window.innerWidth/2)/60}px,
-        ${(e.clientY - window.innerHeight/2)/60}px)`;
+  yesBtn.style.transform =
+    `scale(${yesScale}) translate(${(e.clientX - window.innerWidth/2)/60}px,
+    ${(e.clientY - window.innerHeight/2)/60}px)`;
 });
 
-function toggleMusic() {
-    if (!musicPlaying) {
-        music.play();
-        musicPlaying = true;
-    } else {
-        music.pause();
-        musicPlaying = false;
-    }
-}
-
 function yesClicked(e) {
-    e.stopPropagation();
+  e.stopPropagation();
 
-    for (let i = 0; i < 40; i++) {
-        let conf = document.createElement('div');
-        conf.className = 'confetti';
-        conf.innerHTML = ['💖','💘','❤️','😍'][Math.floor(Math.random()*4)];
-        conf.style.left = Math.random() * 100 + '%';
-        conf.style.top = '-20px';
-        document.body.appendChild(conf);
-        setTimeout(() => conf.remove(), 3000);
-    }
+  showBubble(happyLines[Math.floor(Math.random() * happyLines.length)]);
+  cartoon.textContent = "😍";
+  cartoon.classList.add("happy");
+  pointer.classList.remove('show');
 
+  for (let i = 0; i < 30; i++) {
+    let c = document.createElement('div');
+    c.className = 'confetti';
+    c.textContent = ['💖','💘','❤️','😍'][Math.floor(Math.random()*4)];
+    c.style.left = Math.random() * 100 + '%';
+    c.style.top = '-20px';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+
+  setTimeout(() => {
     document.body.innerHTML = `
-        <div style="
-            height:100vh;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-            font-family:Poppins;
-            text-align:center;">
-            <h1 style="color:#e63946;">IT WAS ALWAYS YES 💖</h1>
-            <p>You’re my Valentine now 😌</p>
-        </div>`;
+      <div style="height:100vh;display:flex;flex-direction:column;
+      justify-content:center;align-items:center;
+      background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+      font-family:Poppins;text-align:center;">
+        <h1 style="color:#e63946;">IT WAS ALWAYS YES DUHH 💖</h1>
+        <p>You’re my Valentine now...see that wasn't so hard 😌</p>
+      </div>`;
+  }, 700);
 }
 </script>
 
